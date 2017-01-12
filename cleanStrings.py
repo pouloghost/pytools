@@ -7,39 +7,39 @@ def readNames(fileName):
     try:
         tree = ET.parse(fileName)
         root = tree.getroot()
-    except Exception, e:
-        print "error open, ", e
+    except Exception as e:
+        print("error open, ", e)
         return None
     
     strings = root.findall('string')
     names = {}
     for string in strings:
-        if string.attrib.has_key('name'):
+        if 'name' in string.attrib:
             name = string.attrib['name']
-            if not names.has_key(name):
+            if name not in names:
                 names[name] = [string, False]
     return names
 #填入默认值
 def addByFilter(names, root):
-    for value in names.itervalues():
+    for value in names.values():
         if not value[1]:
             root.append(value[0])
-            print value[0]
+            print(value[0])
 #删除多余值
 def deleteByFilter(names, fileName):
     try:
         tree = ET.parse(fileName)
         root = tree.getroot()
-    except Exception, e:
-        print "error open, ", e
+    except Exception as e:
+        print("error open, ", e)
         return 0
 
     strings = root.findall('string')
     for string in strings:
-        if string.attrib.has_key('name'):
+        if 'name' in string.attrib:
             name = string.attrib['name']
-            if not names.has_key(name):
-                print name
+            if name not in names:
+                print(name)
                 root.remove(string)
             else:
                 names[name][1] = True
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     #需修改的文件
     checkFiles = argv[2:]
     for checkFile in checkFiles:
-        print checkFile
+        print(checkFile)
         length = deleteByFilter(namesInFilter, checkFile)
-        print checkFile, ' filter ', len(namesInFilter), 'check ', length
+        print(checkFile, ' filter ', len(namesInFilter), 'check ', length)
     
